@@ -1,0 +1,119 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Courier New', Courier, monospace;
+    background: #000000;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    text-align: center;
+    padding: 20px;
+    background: #333333;
+    color: #ffffff;
+}
+
+header h1 {
+    font-size: 24px;
+}
+
+#calculator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5%;
+    flex: 1;
+}
+
+.alliance-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.alliance-section {
+    width: 45%;
+    margin-bottom: 20px;
+}
+
+input,
+button {
+    padding: 10px;
+    margin-bottom: 10px;
+    width: calc(100% - 20px);
+    transition: background 0.3s ease, transform 0.3s ease;
+    box-sizing: border-box;
+}
+
+input.positive {
+    background: #4CAF50;
+    color: #ffffff;
+}
+
+input.negative {
+    background: #FF5733;
+    color: #ffffff;
+}
+
+button {
+    background: #333333;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+    border-radius: 7px;
+}
+
+button:hover {
+    background: #555555;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+button.win {
+    background: #000000;
+    border: 0.5px solid white;
+}
+
+button.win.selected {
+    background: #ffffff;
+    color: #000000;
+}
+
+button.win:hover {
+    background: #ffffff;
+    color: #000000;
+}
+
+button.loss {
+    background: #FF5733;
+}
+
+#located-text {
+    text-align: center;
+    padding: 15px;
+}
+
+button.clear {
+    align-self: flex-start;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background: #333333;
+    color: #ffffff;
+    margin-top: auto;
+}
+
+@media (max-width: 768px) {
+    .alliance-section {
+        width: 100%;
+    }
+}

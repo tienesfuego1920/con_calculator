@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Conflict of Nations Elo Calculator</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="//tienesfuego">
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace;
+            background: #000000;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background: #333333;
+            color: #ffffff;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        #calculator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 5%;
+            flex: 1;
+        }
+
+        .alliance-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .alliance-section {
+            width: 45%;
+            margin-bottom: 20px;
+        }
+
+        input,
+        button {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: calc(100% - 20px);
+            transition: background 0.3s ease, transform 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        input.positive {
+            background: #4CAF50;
+            color: #ffffff;
+        }
+
+        input.negative {
+            background: #FF5733;
+            color: #ffffff;
+        }
+
+        button {
+            background: #333333;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            border-radius: 7px;
+        }
+
+        button:hover {
+            background: #555555;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        button.win {
+            background: #000000;
+            border: 0.5px solid white;
+        }
+
+        button.win.selected {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        button.win:hover {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        button.loss {
+            background: #FF5733;
+        }
+
+        #located-text {
+            text-align: center;
+            padding: 15px;
+        }
+
+        button.clear {
+            align-self: flex-start;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background: #333333;
+            color: #ffffff;
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            .alliance-section {
+                width: 100%;
+            }
+        }
+    </style>
+    <script>
+        function Calculator(operator, allianceNumber) {
+            var currentELO = parseFloat(document.getElementById('elo' + allianceNumber).value);
+
+            var opponentELO = parseFloat(document.getElementById('elo' + (allianceNumber === 1 ? 2 : 1)).value);
+
+            if (isNaN(currentELO) || isNaN(opponentELO)) {
+                alert("Please enter valid numeric values for ELO.");
+                return;
+            }
+
+            var c, result1, d, result2;
+
+            switch (operator) {
+                case 'Win':
+                    c = (10 ** (currentELO / 400)) / ((10 ** (opponentELO / 400)) + (10 ** (currentELO / 400)))
+                    result1 = currentELO + (50 * (1 - c))
+                    d = (10 ** (opponentELO / 400)) / ((10 ** (currentELO / 400)) + (10 ** (opponentELO / 400)))
+                    result2 = opponentELO + (50 * (0 - d))
+                    break;
+            }
+
+            result1 = Math.round(result1 * 1) / 1;
+            result2 = Math.round(result2 * 1) / 1;
+            var change1 = result1 - currentELO;
+            var change2 = result2 - opponentELO;
+
+            var result1Button = document.getElementById('result' + allianceNumber);
+            result1Button.className = change1 >= 0 ? 'positive' : 'negative';
+            result1Button.value = result1;
+
+            var result2Button = document.getElementById('result' + (allianceNumber === 1 ? 2 : 1));
+            result2Button.className = change2 >= 0 ? 'positive' : 'negative';
+            result2Button.value = result2;
+
+            var winButton = document.getElementById('win' + allianceNumber);
+            var lossButton = document.getElementById('loss' + allianceNumber);
+
+            document.getElementById('win1').classList.remove('selected');
+            document.getElementById('win2').classList.remove('selected');
+
+            if (operator === 'Win') {
+                winButton.classList.add('selected');
+            }
+            document.getElementById('change' + allianceNumber).className = change1 >= 0 ? 'positive' : 'negative';
+            document.getElementById('change' + allianceNumber).value = change1;
+            document.getElementById('change' + (allianceNumber === 1 ? 2 : 1)).className = change2 >= 0 ? 'positive' : 'negative';
+            document.getElementById('change' + (allianceNumber === 1 ? 2 : 1)).value = change2;
+        }
+        function clearForm() {
+            ['elo1', 'elo2', 'change1', 'result1', 'change2', 'result2'].forEach(id => {
+                document.getElementById(id).value = '';
+                document.getElementById(id).className = '';
+            });
+            ['win1', 'win2'].forEach(id => {
+                document.getElementById(id).classList.remove('selected');
+            });
+        }
+
+    </script>
+</head>
+
+<body>
+    <header>
+        <h1>Conflict of Nations Elo Calculator</h1>
+    </header>
+    <main id="calculator">
+        <form id="alliance-form">
+            <div class="alliance-container">
+                <div class="alliance-section">
+                    <input type="text" id="elo1" placeholder="Enter Alliance 1 ELO" />
+                    <input type="text" id="change1" placeholder="Change (+/-)" disabled />
+                    <input type="text" id="result1" placeholder="New ELO" class="" disabled />
+                    <button type="button" id="win1" class="win" onclick="Calculator('Win', 1)">Win Alliance 1</button>
+                </div>
+                <div class="alliance-section">
+                    <input type="text" id="elo2" placeholder="Enter Alliance 2 ELO" />
+                    <input type="text" id="change2" placeholder="Change (+/-)" disabled />
+                    <input type="text" id="result2" placeholder="New ELO" class="" disabled />
+                    <button type="button" id="win2" class="win" onclick="Calculator('Win', 2)">Win Alliance 2</button>
+                </div>
+            </div>
+        </form>
+        <button type="button" class="clear" onclick="clearForm()">Clear</button>
+    </main>
+    <p id="located-text">Enter the current ELO points of both alliances and click the respective buttons to calculate
+        the changes.</p>
+    <footer>
+        <p>by //tienesfuego</p>
+    </footer>
+</body>
+
+</html>
